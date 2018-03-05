@@ -2,15 +2,12 @@
   <ion-navbar color="primary">
     <ion-title>
       Google Maps
+
+      <ion-icon float-end name="add-circle" (click)="adicionaMarcador()"></ion-icon>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content >
-    <ion-item>
-      <button ion-button block clear (click)="adicionaMarcador()">Add marker</button>
-    </ion-item>
-
     <div id="map"></div>
-
 </ion-content>

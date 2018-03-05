@@ -1,7 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
+import { NavController, Platform, ToastController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
-import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
+import { NativeGeocoder, NativeGeocoderReverseResult } from '@ionic-native/native-geocoder';
 
 
 declare var google: any;
@@ -18,7 +18,8 @@ export class HomePage implements AfterViewInit {
   constructor(public navCtrl: NavController, 
     private geolocation: Geolocation, 
     private plataform: Platform,
-    private nativeGeocoder: NativeGeocoder) {
+    private nativeGeocoder: NativeGeocoder,
+    public toastCtrl:ToastController) {
   }
 
   ngAfterViewInit(){
@@ -53,13 +54,26 @@ export class HomePage implements AfterViewInit {
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
 
-    let myLocationMaker = this.addMarker(latLng, this.map);
+     this.addMarker(latLng, this.map);
+
+    let toast = this.toastCtrl.create({ duration: 3000, position: 'bottom'});
 
     this.nativeGeocoder.reverseGeocode(lat, lng)
-    .then((result: any) => {
-      console.log(JSON.stringify(result))
+    .then((result: NativeGeocoderReverseResult) => {
+      // let s: string = 'administrativeArea= '+result.administrativeArea+', '+
+      //  'countryCode= '+result.countryCode+', '+
+      //  'countryName= '+result.countryName+', '+
+      //  'locality= '+result.locality+', '+
+      //  'postalCode= '+result.postalCode+', '+
+      //  'subAdministrativeArea= '+result.subAdministrativeArea+', '+
+      //  'subLocality= '+result.subLocality+', '+
+      //  'subThoroughfare= '+result.subThoroughfare+', '+
+      //  'thoroughfare= '+result.thoroughfare;
+
+      console.log(result)
+       
     }).catch((error: any) => {
-      console.log(error)}
+      console.error(error)}
     );
 
 
@@ -79,10 +93,28 @@ export class HomePage implements AfterViewInit {
     });
   }
   adicionaMarcador(){
-    //this.addMarker(this.map.getCenter(), this.map)
-    // this.nativeGeocoder.reverseGeocode(this.map.getCenter().lat, this.map.getCenter().lng)
-    // .then((result: NativeGeocoderReverseResult) => console.log(JSON.stringify(result)))
-    // .catch((error: any) => console.log(error));
+
+    let toast = this.toastCtrl.create({ duration: 3000, position: 'bottom'});
+
+    this.addMarker(this.map.getCenter(), this.map)
+    console.log(this.map.getCenter());
+     this.nativeGeocoder.reverseGeocode(this.map.getCenter().lat(), this.map.getCenter().lng())
+     .then((result: NativeGeocoderReverseResult) => {
+      //  let s: string = 'administrativeArea= '+result.administrativeArea+', '+
+      //  'countryCode= '+result.countryCode+', '+
+      //  'countryName= '+result.countryName+', '+
+      //  'locality= '+result.locality+', '+
+      //  'postalCode= '+result.postalCode+', '+
+      //  'subAdministrativeArea= '+result.subAdministrativeArea+', '+
+      //  'subLocality= '+result.subLocality+', '+
+      //  'subThoroughfare= '+result.subThoroughfare+', '+
+      //  'thoroughfare= '+result.thoroughfare;
+
+      
+       console.log(result)
+     }).catch((error: any) => {
+       console.error(error)}
+     );
   }
 
 }
